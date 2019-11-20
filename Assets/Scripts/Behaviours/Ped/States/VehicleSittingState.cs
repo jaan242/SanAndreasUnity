@@ -121,8 +121,10 @@ namespace SanAndreasUnity.Behaviours.Peds.States
 				return;
 
 			this.UpdateAnimsInternal();
-			
-		}
+
+            if (m_isServer)
+                this.SwitchToDriveByState();
+        }
 
 		void UpdateAnimsInternal()
 		{
@@ -173,8 +175,15 @@ namespace SanAndreasUnity.Behaviours.Peds.States
 			}
 		}
 
+        protected virtual void SwitchToDriveByState()
+        {
+            if (m_ped.IsAimOn && m_ped.IsHoldingWeapon)
+            {
+                m_ped.SwitchState<DriveByState>();
+            }
+        }
 
-		public override void UpdateCameraZoom()
+        public override void UpdateCameraZoom()
 		{
 			m_ped.CameraDistanceVehicle = Mathf.Clamp(m_ped.CameraDistanceVehicle - m_ped.MouseScrollInput.y, PedManager.Instance.minCameraDistanceFromPed,
 				PedManager.Instance.maxCameraDistanceFromPed);
