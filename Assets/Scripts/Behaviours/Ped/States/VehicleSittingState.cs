@@ -175,11 +175,19 @@ namespace SanAndreasUnity.Behaviours.Peds.States
 			}
 		}
 
+        public void StopDriveBy(Vehicle vehicle, Vehicle.Seat seat)
+        {
+            this.CurrentVehicle = vehicle;
+            this.CurrentVehicleSeatAlignment = seat.Alignment;
+
+            m_ped.SwitchState<VehicleSittingState>();
+        }
+
         protected virtual void SwitchToDriveByState()
         {
             if (m_ped.IsAimOn && m_ped.IsHoldingWeapon)
             {
-                m_ped.SwitchState<DriveByState>();
+                m_ped.GetStateOrLogError<DriveByState>().StartDriveBy(this.CurrentVehicle, this.CurrentVehicleSeat);
             }
         }
 
